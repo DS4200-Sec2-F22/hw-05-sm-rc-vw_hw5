@@ -2,8 +2,21 @@ body {
   font-family: Arial;
 }
 
-
-
 .centered_header {
   text-align: center;
+}
+
+.two_cols {
+  padding: 30px;
+  display: flex;
+}
+
+.left_col {
+  width: 60%;
+  float: left;
+}
+
+.right_col {
+  width: 40%;
+  float: right;
 }

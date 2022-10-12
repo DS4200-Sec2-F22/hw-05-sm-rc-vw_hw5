@@ -3,16 +3,67 @@
 
 <head>
     <meta charset=utf-8/>
+    <link rel='stylesheet' href='style.css'>
+    <script src='d3.v6.1.1/d3.min.js'></script>
     <title> hw-05 </title>
 </head>
 
 
 <body>
 
-<h1> hw-05: Interactive Graph with D3 </h1>
+    <h1 class='centered_header'> hw-05: Interactive Graph with D3 </h1>
+    <div class='two_cols'>
+        <div class="left_col">
+        </div>
+        <div class='right_col'>
+            <p id ='pointClick'>Last point clicked:</p>
+            <p id='point'> filler </p>
 
+            <!-- drop down menus for new x and y values -->
+            <form>Select the x coordinate for the point you want to add.
+                <select id="x_coord">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                    <option>6</option>
+                    <option>7</option>
+                    <option>8</option>
+                    <option>9</option>
+                </select>
+            <br></br>
+            </form>
+
+            <form>Select the y coordinate for the point you want to add.
+                <select id="y_coord">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                    <option>6</option>
+                    <option>7</option>
+                    <option>8</option>
+                    <option>9</option>
+                </select>
+            <br></br>
+            <input type="button" onclick="getPoint()" value="Add point">
+            </form>
+        </div>
+    </div>
+
+
+    <h3 class="centered_header">Acknowledgements</h3>
+    <div>
+        <ul>
+            <li> <a href=" " target="_blank"> </a> </li>
+            <li> <a href='' target="_blank"> </a> </li>
+            <li> <a href='' target="_blank"> </a> </li>
+        </ul>
+    </div>
+
+<script src=main.js></script>
 </body>
-
-<h3 class="centered_header">Acknowledgements</h3>
 
 </html>
