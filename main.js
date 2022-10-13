@@ -1,5 +1,5 @@
 const FRAME_HEIGHT = 500;
-const FRAME_WIDTH = 200;
+const FRAME_WIDTH = 500;
 const MARGINS = {left: 50, right: 50, top: 50, bottom: 50};
 
 const VIS_HEIGHT = FRAME_HEIGHT - MARGINS.top - MARGINS.bottom;
@@ -10,17 +10,35 @@ const FRAME1 =
 		.append('svg')
 			.attr('height', FRAME_HEIGHT)
 			.attr('width', FRAME_WIDTH)
-			.attr('class', 'frame');
+			.attr('class', 'frame')
+		.append('g')
+			.attr("transform", `translate(${MARGINS.left},${MARGINS.top})`);
 
-// data_scat = d3.csv('data/scatter-data.csv');
+d3.csv('data/scatter-data.csv').then( function(data) {
+	// Add X axis
+  	const x = d3.scaleLinear()
+    	.domain([0, d3.max(data, function (d) { return d.x})])
+    	.range([ 0, VIS_WIDTH]);
+  	FRAME1.append("g")
+    	.attr("transform", "translate(0," + 300 + ")")
+    	.call(d3.axisBottom(x));
 
-// const MAX_Y = d3.max(data_scat, (d) => {return d.y;});
-// const Y_SCALE = d3.scaleLinear()
-// 				.domain([0, MAX_Y])
-// 				.range([VIS_HEIGHT, 0]);
+	// Add Y axis
+	const y = d3.scaleLinear()
+  		.domain([0, d3.max(data, function (d) { return d.y})])
+  		.range([VIS_HEIGHT - 100, 0])
+	FRAME1.append("g")
+  		.call(d3.axisLeft(y));
 
-// const MAX_X = d3.max(data_scat, (d) => {return d.x;});
-// const X_SCALE = d3.scaleLinear()
-// 				.domain([0, MAX_X])
-// 				.range([0,VIS_WIDTH]);
+  	// Add dots
+  	FRAME1.append('g')
+    	.selectAll("dot")
+    	.data(data)
+    	.enter()
+    	.append("circle")
+      	.attr("cx", function (d) { return x(d.x); } )
+      	.attr("cy", function (d) { return y(d.y); } )
+      	.attr("r", 10)
+      	.attr('id', 'point')
 
+})
