@@ -32,3 +32,18 @@ body {
 #point{
   display: none;
 }
+
+.bar {
+    fill: fuchsia; 
+}
+
+.bar_chart {
+  padding: 30px;
+  display: flex;
+}
+.vis2 {
+  display:  flex;
+  flex-direction:  row;
+  flex-wrap:  wrap;
+  width:  100%;
+}
