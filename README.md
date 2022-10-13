@@ -36,7 +36,7 @@ The purpose of this assignment is to practice creating interactive visualization
 
 - In order to read data from csv files, you will need to use a python simple server. To do that, follow these steps:
   - `CD` or open a terminal / command prompt window in the same folder that holds your website code.
-  - Start a python simple server with one of these commands (depending on how you set python up on your machine): `python -m http.server`, `python3 -m http.server`, or `py -m http.server`. 
+  - Start a python simple server with one of these commands (depending on how you set python up on your machine):  python -m http.server, python3 -m http.server, or py -m http.server. 
   - After running the command, wait for the output: `Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/)`.
   - Open your web browser (Firefox or Chrome) and navigate to the URL: http://localhost:8000. This is where you will see your code rendered. 
 

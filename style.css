@@ -21,10 +21,14 @@ body {
   float: right;
 }
 
-.point {
-  fill: blue;
+.datapoint:hover {
+  fill:  orange;
 }
 
-.point:hover {
-  fill:  orange;
+#pointClick{
+  display: none;
+}
+
+#point{
+  display: none;
 }

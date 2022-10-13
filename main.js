@@ -39,6 +39,21 @@ d3.csv('data/scatter-data.csv').then( function(data) {
       	.attr("cx", function (d) { return x(d.x); } )
       	.attr("cy", function (d) { return y(d.y); } )
       	.attr("r", 10)
-      	.attr('id', 'point')
+      	.attr('fill','#00BFFF')
+      	.attr('class', 'datapoint')
+      	.on("click", function(d) {
+      		const target = d3.select(this)
+      		const pointdisplay = document.getElementById('pointClick');
+    		const pointtext = document.getElementById('point');
+      		const currentStroke = target.attr("stroke")
+      		if(currentStroke == "none"){
+          		target.attr("stroke","green")
+          		target.attr("stroke-width","5px")
+          		pointdisplay.style.display = 'block'
+          		pointtext.style.display ='block'
+      		}else{
+          		target.attr("stroke","none")}
+          		pointtext.style.display = 'none'
+			}) 
 
 })
