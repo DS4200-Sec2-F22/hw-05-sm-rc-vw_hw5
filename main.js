@@ -70,7 +70,7 @@ d3.csv('data/scatter-data.csv').then( function(data) {
 
 })
 
-// plots new point from drop down
+// plots new point from the drop down
 function getPoint() {
 	// saves drop down menus in variables
     const x_coord = document.getElementById("x_coord");
@@ -114,7 +114,7 @@ function getPoint() {
 			 })
   };
 
-// making barchart 
+// making the barchart 
 const FRAME2 = d3.select("#bar_chart")
                 .append("svg")
                     .attr("width", FRAME_WIDTH)
@@ -131,7 +131,7 @@ function build_bar_chart() {
                             .domain(data.map(d => d.category))
                             .padding(0.2); 
 
-        // creating Y scale 
+        // creating y scale 
         const Y_SCALE = d3.scaleLinear()
                             .domain([0, d3.max(data, function (d) { return d.amount})])
                             .range([VIS_HEIGHT, 0]); 
@@ -143,7 +143,7 @@ function build_bar_chart() {
 
         
 
-        // Adding Y axis 
+        // Adding y axis 
         FRAME2.append("g")
                 .attr("transform", "translate(" + MARGINS.left +
                     "," + MARGINS.top + ")")
