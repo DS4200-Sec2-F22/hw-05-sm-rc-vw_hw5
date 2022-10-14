@@ -71,31 +71,33 @@ d3.csv('data/scatter-data.csv').then( function(data) {
 })
 
 // making barchart 
-const FRAME2 = d3.select("#Barchart")
+const FRAME2 = d3.select("#bar_chart")
                 .append("svg")
                     .attr("width", FRAME_WIDTH)
                     .attr("height", FRAME_HEIGHT)
                     .attr("class", "frame"); 
 
 // building 
-
+function build_bar_chart() {
     d3.csv('data/bar-data.csv').then((data) => {
 
         // creating x scale 
         const X_SCALE = d3.scaleBand() // for categorical data 
                             .range([0, VIS_WIDTH])
-                            .domain(data.map(d => d.Category))
+                            .domain(data.map(d => d.category))
                             .padding(0.2); 
+
+        // creating Y scale 
+        const Y_SCALE = d3.scaleLinear()
+                            .domain([0, d3.max(data, function (d) { return d.amount})])
+                            .range([VIS_HEIGHT, 0]); 
         // Adding x axis
         FRAME2.append("g")
                 .attr("transform", "translate(" + MARGINS.left +
                     "," + (VIS_HEIGHT + MARGINS.top) + ")")
                 .call(d3.axisBottom(X_SCALE));  
 
-        // creating Y scale 
-        const Y_SCALE = d3.scaleLinear()
-                            .domain([0, d3.max(data, function (d) { return d.amount})])
-                            .range([VIS_HEIGHT, 0]); 
+        
 
         // Adding Y axis 
         FRAME2.append("g")
@@ -110,7 +112,7 @@ const FRAME2 = d3.select("#Barchart")
                 .append("rect")
                     .attr("x", (d) => {
                         // x pos depends on category 
-                        return (X_SCALE(d.Category) + MARGINS.left); 
+                        return (X_SCALE(d.category) + MARGINS.left); 
                     })
                     .attr("y", (d) => {
                         // start of rect depends on value 
@@ -120,9 +122,48 @@ const FRAME2 = d3.select("#Barchart")
                         // height of bar should be height of vis - value
                         return (VIS_HEIGHT - Y_SCALE(d.amount));
                     })
-                    .attr("width", X_SCALE.bandwidth()) // width comes from X_SCALE for free
+                    .attr("width", X_SCALE.bandwidth()) 
                     .attr("class", (d) => {
-                        return (d.Category + " bar"); 
-                    }); 
-    })
+                        return (d.category + " bar"); 
+                    })
+                    .attr("class", "i_bar"); 
+
+        
+
+        // tool tip
+        const TOOLTIP = d3.select("#bar_chart")
+                            .append ("div")
+                                .attr("class", "tooltip")
+                                .style("opacity", 0);
+
+        // mouse over
+        function mouseover(event, d) {
+            TOOLTIP.style("opacity", 1);
+        }
+
+        // mouse move
+        function mousemove(event, d) {
+            TOOLTIP.html("Name: " + d.amount + "<br/Value: " + d.category)
+                .style("left", (event.pageX + 10) + "px")
+                .style("top", (event.pageY - 50) + "px");
+        }
+
+        // mouse leave
+        function mouseleave(event, d) {
+            TOOLTIP.style("opacity", 0)
+        }
+
+        // event listner for all three functions
+        FRAME2.selectAll("i_bar")
+                .on("mouseover", mouseover)
+                .on("mousemove", mousemove)
+                .on("mouseleave", mouseleave);
+
+    });
+
+}
+
+build_bar_chart()
+
+
 
