@@ -45,17 +45,27 @@ d3.csv('data/scatter-data.csv').then( function(data) {
       	.attr('class', 'datapoint')
       	.on("click", function(d) {
       		const target = d3.select(this)
-      		const pointdisplay = document.getElementById('pointClick');
-    		const pointtext = document.getElementById('point');
+      		const pointdisplay = document.getElementById('pointClick')
+    		const pointtext = document.getElementById('points')
+    		const x = parseInt(this.getAttribute('cx') / 44.44)
+    		const y = parseInt((this.getAttribute('cy') + VIS_HEIGHT + 100) / 44.44)
+
+          	//changing coordinate display text
+          	pointtext.innerHTML = ' (' + x + ', ' + y + ')'
+          	pointdisplay.style.display = 'block'
+          	pointtext.style.display ='block'
       		const currentStroke = target.attr("stroke")
+
+
       		if(currentStroke == "none"){
+      			// adding border
           		target.attr("stroke","green")
           		target.attr("stroke-width","5px")
-          		pointdisplay.style.display = 'block'
-          		pointtext.style.display ='block'
-      		}else{
+
+          	}
+          	else{
           		target.attr("stroke","none")}
-          		pointtext.style.display = 'none'
+          		
 			}) 
 
 })
@@ -68,8 +78,8 @@ const FRAME2 = d3.select("#Barchart")
                     .attr("class", "frame"); 
 
 // building 
-function build_bar_chart() {
-    d3.csv('bar-data.csv').then((data) => {
+
+    d3.csv('data/bar-data.csv').then((data) => {
 
         // creating x scale 
         const X_SCALE = d3.scaleBand() // for categorical data 
@@ -84,7 +94,7 @@ function build_bar_chart() {
 
         // creating Y scale 
         const Y_SCALE = d3.scaleLinear()
-                            .domain([0, 100000])
+                            .domain([0, d3.max(data, function (d) { return d.amount})])
                             .range([VIS_HEIGHT, 0]); 
 
         // Adding Y axis 
@@ -104,17 +114,15 @@ function build_bar_chart() {
                     })
                     .attr("y", (d) => {
                         // start of rect depends on value 
-                        return (Y_SCALE(d.Value) + MARGINS.top);
+                        return (Y_SCALE(d.amount) + MARGINS.top);
                     })
                     .attr("height", (d) => {
                         // height of bar should be height of vis - value
-                        return (VIS_H - Y_SCALE(d.Value));
+                        return (VIS_HEIGHT - Y_SCALE(d.amount));
                     })
                     .attr("width", X_SCALE.bandwidth()) // width comes from X_SCALE for free
                     .attr("class", (d) => {
                         return (d.Category + " bar"); 
                     }); 
     })
-}
 
-build_bar_chart();

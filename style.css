@@ -29,7 +29,7 @@ body {
   display: none;
 }
 
-#point{
+#points{
   display: none;
 }
 
@@ -41,9 +41,9 @@ body {
   padding: 30px;
   display: flex;
 }
-.vis2 {
+/*.vis2 {
   display:  flex;
   flex-direction:  row;
   flex-wrap:  wrap;
   width:  100%;
-}
+}*/
