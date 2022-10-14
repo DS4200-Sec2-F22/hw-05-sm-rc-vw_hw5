@@ -25,6 +25,7 @@ body {
   fill:  orange;
 }
 
+
 #pointClick{
   display: none;
 }
@@ -45,20 +46,12 @@ body {
   padding: 30px;
   display: flex;
 }
-/*.vis2 {
-  display:  flex;
-  flex-direction:  row;
-  flex-wrap:  wrap;
-  width:  100%;
-}*/
-
-
 
 .tooltip {
   position: absolute;
-  background-color: lightgray;
+  background-color: whitesmoke;
   border: solid;
   border-width: 2px;
   border-radius: 5px;  
-  padding: 5px;
+  padding: 5px;}
   

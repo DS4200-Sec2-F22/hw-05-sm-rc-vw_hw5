@@ -6,6 +6,7 @@ const MARGINS = {left: 50, right: 50, top: 50, bottom: 50};
 const VIS_HEIGHT = FRAME_HEIGHT - MARGINS.top - MARGINS.bottom;
 const VIS_WIDTH = FRAME_WIDTH - MARGINS.left - MARGINS.right;
 
+// create frame for visualization
 const FRAME1 =
 	d3.select('#scatterplt')
 		.append('svg')
@@ -15,7 +16,7 @@ const FRAME1 =
 		.append('g')
 			.attr("transform", `translate(${MARGINS.left},${MARGINS.top})`);
 
-
+// read in data
 d3.csv('data/scatter-data.csv').then( function(data) {
 	// Add X axis
   	const x = d3.scaleLinear()
@@ -32,7 +33,7 @@ d3.csv('data/scatter-data.csv').then( function(data) {
 	FRAME1.append("g")
   		.call(d3.axisLeft(y));
 
-  	// Add dots
+  	// Add points from data set
   	FRAME1.append('g')
     	.selectAll("dot")
     	.data(data)
@@ -43,32 +44,75 @@ d3.csv('data/scatter-data.csv').then( function(data) {
       	.attr("r", 10)
       	.attr('fill','#00BFFF')
       	.attr('class', 'datapoint')
+      	// add on click functionality
       	.on("click", function(d) {
       		const target = d3.select(this)
       		const pointdisplay = document.getElementById('pointClick')
     		const pointtext = document.getElementById('points')
     		const x = parseInt(this.getAttribute('cx') / 44.44)
-    		const y = parseInt((this.getAttribute('cy') + VIS_HEIGHT + 100) / 44.44)
+    		const y = parseInt(9 - (this.getAttribute('cy') / 35))
 
           	//changing coordinate display text
           	pointtext.innerHTML = ' (' + x + ', ' + y + ')'
           	pointdisplay.style.display = 'block'
           	pointtext.style.display ='block'
+
       		const currentStroke = target.attr("stroke")
-
-
-      		if(currentStroke == "none"){
-      			// adding border
-          		target.attr("stroke","green")
-          		target.attr("stroke-width","5px")
-
-          	}
-          	else{
+       		if(currentStroke == "green"){
+      			//removing border if it exists
           		target.attr("stroke","none")}
-          		
-			}) 
+          	
+          	else{
+          		// adding border
+          		target.attr("stroke","green")
+          		target.attr("stroke-width","5px")}
+			 })
 
 })
+
+// plots new point from drop down
+function getPoint() {
+	// saves drop down menus in variables
+    const x_coord = document.getElementById("x_coord");
+    const y_coord = document.getElementById("y_coord");
+
+    // extracts the option chosen from drop down
+    const x = x_coord.options[x_coord.selectedIndex].text;
+    const y = y_coord.options[y_coord.selectedIndex].text;
+
+    // scales selected coordinate to graph
+    const cx = x * 44.444;
+    const cy = (9 - y) * 33;
+
+    // plots new circle 
+    FRAME1.append('g')
+    	.append("circle")
+      	.attr("cx", cx)
+      	.attr("cy", cy)
+      	.attr("r", 10)
+      	.attr('fill','#00BFFF')
+      	.attr('class', 'datapoint')
+      	.on("click", function(d) {
+      		const target = d3.select(this)
+      		const pointdisplay = document.getElementById('pointClick')
+    		const pointtext = document.getElementById('points')
+
+          	//changing coordinate display text
+          	pointtext.innerHTML = ' (' + x + ', ' + y + ')'
+          	pointdisplay.style.display = 'block'
+          	pointtext.style.display ='block'
+
+      		const currentStroke = target.attr("stroke")
+       		if(currentStroke == "green"){
+      			//removing border if it exists
+          		target.attr("stroke","none")}
+          	
+          	else{
+          		// adding border
+          		target.attr("stroke","green")
+          		target.attr("stroke-width","5px")}
+			 })
+  };
 
 // making barchart 
 const FRAME2 = d3.select("#bar_chart")
@@ -105,6 +149,12 @@ function build_bar_chart() {
                     "," + MARGINS.top + ")")
                 .call(d3.axisLeft(Y_SCALE));  
 
+		 // tool tip
+        const TOOLTIP = d3.select("#bar_chart")
+                            .append ("div")
+                                .attr("class", "tooltip")
+                                .style("opacity", 0);
+
         // Add bars 
         FRAME2.selectAll("bars")
                 .data(data)
@@ -123,47 +173,42 @@ function build_bar_chart() {
                         return (VIS_HEIGHT - Y_SCALE(d.amount));
                     })
                     .attr("width", X_SCALE.bandwidth()) 
-                    .attr("class", (d) => {
-                        return (d.category + " bar"); 
+                    .attr("id", (d) => {
+                        return (d.category); 
                     })
-                    .attr("class", "i_bar"); 
+                    .attr("class", "i_bar")
+                    // adding tooltip functionality for mouseover, move and leave
+                    .on('mouseover', function(d) {TOOLTIP.text(d); return TOOLTIP.style("opacity", "1");})
+      				.on("mousemove", function(d) {TOOLTIP.html("Name: " + this.getAttribute('id') + "\nValue: " + parseInt(99 - ((this.getAttribute('y') - MARGINS.top) / 4.05)))
+      					.style("left", (event.pageX + 10) + "px")
+  			            .style("top", (event.pageY - 50) + "px");})
+      				.on("mouseout", function(){return TOOLTIP.style("opacity", "0");});
 
-        
+        // // mouse over
+        // function mouseover(event, d) {
+        //     TOOLTIP.style("opacity", 1);
+        // }
 
-        // tool tip
-        const TOOLTIP = d3.select("#bar_chart")
-                            .append ("div")
-                                .attr("class", "tooltip")
-                                .style("opacity", 0);
+        // // mouse move
+        // function mousemove(event, d) {
+        //     TOOLTIP.html("Name: " + d.amount + "<br/Value: " + d.category)
+        //         .style("left", (event.pageX + 10) + "px")
+        //         .style("top", (event.pageY - 50) + "px");
+        // }
 
-        // mouse over
-        function mouseover(event, d) {
-            TOOLTIP.style("opacity", 1);
-        }
-
-        // mouse move
-        function mousemove(event, d) {
-            TOOLTIP.html("Name: " + d.amount + "<br/Value: " + d.category)
-                .style("left", (event.pageX + 10) + "px")
-                .style("top", (event.pageY - 50) + "px");
-        }
-
-        // mouse leave
-        function mouseleave(event, d) {
-            TOOLTIP.style("opacity", 0)
-        }
+        // // mouse leave
+        // function mouseleave(event, d) {
+        //     TOOLTIP.style("opacity", 0)
+        // }
 
         // event listner for all three functions
-        FRAME2.selectAll("i_bar")
-                .on("mouseover", mouseover)
-                .on("mousemove", mousemove)
-                .on("mouseleave", mouseleave);
+        // FRAME2.selectAll("i_bar")
+        //         .on("mouseover", mouseover)
+        //         .on("mousemove", mousemove)
+        //         .on("mouseleave", mouseleave);
 
     });
 
 }
 
 build_bar_chart()
-
-
-
